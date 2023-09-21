@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('reservation/save', [ReservationController::class, 'save'])->name('reservation.save');
+    Route::post('reservation/save', [ReservationController::class, 'save'])->name('reservation.save');
 });
 
 Route::middleware('auth', 'verified')->group(function () {
