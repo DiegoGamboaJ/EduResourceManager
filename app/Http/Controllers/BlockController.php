@@ -27,24 +27,24 @@ class BlockController extends Controller
 
     public function update(Request $request, int $id)
     {
-        try{
-        DB::beginTransaction();
-        $request->validate([
-            'start_time' => ['require', 'after_or_equal:07:00', 'before_or_equal:17:00'],
-            'end_time' => ['require', 'after_or_equal:07:00', 'before_or_equal:17:00'],
-            'schedule_id' => ['require'],
-        ]);
+        try {
+            DB::beginTransaction();
+            $request->validate([
+                'start_time' => ['require', 'after_or_equal:07:00', 'before_or_equal:17:00'],
+                'end_time' => ['require', 'after_or_equal:07:00', 'before_or_equal:17:00'],
+                'schedule_id' => ['require'],
+            ]);
 
-        $block = Block::findOrFail($id);
+            $block = Block::findOrFail($id);
 
-        $block->update([
-            'start_time' => $request->start,
-            'end_time' => $request->end,
-            'schedule_id' => $request->schedule,
-        ]);
-        DB::commit();
-        return to_route('blocks.all')->with('success', 'Bloque actualizado correctamente.');
-        } catch (ModelNotFoundException $th){
+            $block->update([
+                'start_time' => $request->start,
+                'end_time' => $request->end,
+                'schedule_id' => $request->schedule,
+            ]);
+            DB::commit();
+            return to_route('blocks.all')->with('success', 'Bloque actualizado correctamente.');
+        } catch (ModelNotFoundException $th) {
             DB::rollBack();
             return to_route('blocks.all')->with('fail', 'Bloque no encontrado.');
         } catch (\Throwable $th) {
@@ -62,7 +62,7 @@ class BlockController extends Controller
 
     public function save(Request $request)
     {
-        try{
+        try {
             DB::beginTransaction();
             $request->validate([
                 'start_time' => ['require', 'after_or_equal:07:00', 'before_or_equal:17:00'],
@@ -71,13 +71,13 @@ class BlockController extends Controller
             ]);
 
 
-        Block::create([
-            'start_time' => $request->start,
-            'end_time' => $request->end,
-            'schedule_id' => $request->schedule,
-        ]);
-        DB::commit();
-        return to_route('blocks.all')->with('success', 'Bloque creado correctamente.');
+            Block::create([
+                'start_time' => $request->start,
+                'end_time' => $request->end,
+                'schedule_id' => $request->schedule,
+            ]);
+            DB::commit();
+            return to_route('blocks.all')->with('success', 'Bloque creado correctamente.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return to_route('blocks.all')->with('fail', 'Ha ocurrido un fallo en la creacion del bloque.');
