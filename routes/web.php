@@ -40,6 +40,7 @@ Route::middleware('auth', 'verified')->group(function () {
 });
 
 Route::prefix('admin')->middleware('auth', 'role')->group(function () {
+
     Route::get('colegio', [ColegioController::class, 'conf'])->name('colegio.conf');
     Route::get('users', [UserController::class, 'all'])->name('users.all');
     Route::get('users/new', [UserController::class, 'create'])->name('users.create');
@@ -48,24 +49,34 @@ Route::prefix('admin')->middleware('auth', 'role')->group(function () {
     Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::patch('users/{id}', [UserController::class, 'passdefault'])->name('users.passdefault');
     Route::delete('users/{id}', [UserController::class, 'delete'])->name('users.delete');
-    Route::get('grades', [GradeController::class, 'index'])->name('grades.all');
-    Route::get('grades/create', [GradeController::class, 'create'])->name('grades.create');
-    Route::post('grades/create', [GradeController::class, 'save'])->name('grades.save');
-    Route::get('grades/{id}', [GradeController::class, 'edit'])->name('grades.edit');
-    Route::put('grades/{id}', [GradeController::class, 'update'])->name('grades.update');
-    Route::delete('grades/{id}', [GradeController::class, 'delete'])->name('grades.delete');
-    Route::get('cycles', [ScheduleController::class, 'index'])->name('schedules.all');
-    Route::get('cycles/create', [ScheduleController::class, 'create'])->name('schedules.create');
-    Route::post('cycles/create', [ScheduleController::class, 'save'])->name('schedules.save');
-    Route::get('cycles/{id}', [ScheduleController::class, 'edit'])->name('schedules.edit');
-    Route::put('cycles/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
-    Route::delete('cycles/{id}', [ScheduleController::class, 'delete'])->name('schedules.delete');
-    Route::get('blocks', [BlockController::class, 'index'])->name('blocks.all');
-    Route::get('blocks/create', [BlockController::class, 'create'])->name('blocks.create');
-    Route::post('blocks/create', [BlockController::class, 'save'])->name('blocks.save');
-    Route::get('blocks/{id}', [BlockController::class, 'edit'])->name('blocks.edit');
-    Route::put('blocks/{id}', [BlockController::class, 'update'])->name('blocks.update');
-    Route::delete('blocks/{id}', [BlockController::class, 'delete'])->name('blocks.delete');
+
+    Route::group(["prefix" => "grades", "as" => "grades."], function () {
+        Route::get('', [GradeController::class, 'index'])->name('all');
+        Route::get('create', [GradeController::class, 'create'])->name('create');
+        Route::post('store', [GradeController::class, 'store'])->name('store');
+        Route::get('{id}', [GradeController::class, 'edit'])->name('edit');
+        Route::put('{id}', [GradeController::class, 'update'])->name('update');
+        Route::delete('{id}', [GradeController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(["prefix" => "cycles", "as" => "schedules."], function () {
+        Route::get('', [ScheduleController::class, 'index'])->name('all');
+        Route::get('create', [ScheduleController::class, 'create'])->name('create');
+        Route::post('store', [ScheduleController::class, 'store'])->name('store');
+        Route::get('{id}', [ScheduleController::class, 'edit'])->name('edit');
+        Route::put('{id}', [ScheduleController::class, 'update'])->name('update');
+        Route::delete('{id}', [ScheduleController::class, 'destroy'])->name('destroy');
+    });
+
+
+    Route::group(["prefix" => "blocks", "as" => "blocks."], function () {
+        Route::get('', [BlockController::class, 'index'])->name('all');
+        Route::get('create', [BlockController::class, 'create'])->name('create');
+        Route::post('store', [BlockController::class, 'store'])->name('store');
+        Route::get('{id}', [BlockController::class, 'edit'])->name('edit');
+        Route::put('{id}', [BlockController::class, 'update'])->name('update');
+        Route::delete('{id}', [BlockController::class, 'destroy'])->name('destroy');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

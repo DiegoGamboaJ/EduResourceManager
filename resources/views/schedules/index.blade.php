@@ -38,7 +38,7 @@
                                             </div>
 
                                             <div>
-                                                <form action="{{route('schedules.delete', ['id' => $schedule->id])}}" method="POST">
+                                                <form action="{{route('schedules.destroy', ['id' => $schedule->id])}}" method="POST">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="hover:text-red-950 active:text-red-700">

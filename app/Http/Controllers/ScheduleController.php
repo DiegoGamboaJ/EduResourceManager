@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\schedule\UpdateAndStoreScheduleRequest;
 use App\Models\Schedule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -21,13 +22,9 @@ class ScheduleController extends Controller
         return view('schedules.create');
     }
 
-    public function save(Request $request)
+    public function store(UpdateAndStoreScheduleRequest $request)
     {
-        $request->validate([
-            'cycle' => ['required', 'string', 'max:10', 'unique:' . Schedule::class, 'regex:/^[1-9]° ciclo$/'],
-        ]);
-
-        $schedule = Schedule::create([
+        Schedule::create([
             'cycle' => $request->cycle,
         ]);
 
@@ -41,27 +38,23 @@ class ScheduleController extends Controller
         return view('schedules.edit', compact('schedule'));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateAndStoreScheduleRequest $request, int $id)
     {
         try {
-            DB::beginTransaction();
             $schedule = Schedule::findOrFail($id);
 
             $schedule->update([
                 'cycle' => $request->cycle,
             ]);
-            DB::commit();
             return to_route('schedules.all')->with('success', 'Ciclo actualizado correctamente.');
         } catch (ModelNotFoundException $th) {
-            DB::rollBack();
             return to_route('grades.all')->with('fail', 'Ciclo no encontrado.');
         } catch (\Throwable $th) {
-            DB::rollBack();
             return to_route('grades.all')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
         }
     }
 
-    public function delete(int $id)
+    public function destroy(int $id)
     {
         $schedule = Schedule::find($id);
 

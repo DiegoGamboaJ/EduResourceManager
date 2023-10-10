@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\grade\UpdateAndStoreGradeRequest;
 use App\Models\Grade;
 use App\Models\Schedule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class GradeController extends Controller
 {
@@ -24,21 +23,18 @@ class GradeController extends Controller
         return view('grades.create', compact('schedules'));
     }
 
-    public function save(Request $request)
+    public function store(UpdateAndStoreGradeRequest $request)
     {
-        // $contains = Str::contains($request->name, '°');
+        try {
+            Grade::create([
+                'name' => $request->name,
+                'schedule_id' => $request->schedule,
+            ]);
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:6', 'unique:' . Grade::class, 'regex:/^[1-8]°[A-F]$/'],
-            'schedule' => ['required'],
-        ]);
-
-        Grade::create([
-            'name' => $request->name,
-            'schedule_id' => $request->schedule,
-        ]);
-
-        return to_route('grades.all')->with('success', 'Curso creado correctamente.');
+            return to_route('grades.all')->with('success', 'Curso creado correctamente.');
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'fail', 'message' => 'Error al agregar un grado']);
+        }
     }
 
     public function edit(int $id)
@@ -49,28 +45,24 @@ class GradeController extends Controller
         return view('grades.edit', compact('grade', 'schedules'));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateAndStoreGradeRequest $request, int $id)
     {
         try {
-            DB::beginTransaction();
             $grade = Grade::findOrFail($id);
 
             $grade->update([
                 'name' => $request->name,
                 'schedule_id' => $request->schedule,
             ]);
-            DB::commit();
             return to_route('grades.all')->with('success', 'Curso actualizado correctamente.');
         } catch (ModelNotFoundException $th) {
-            DB::rollBack();
             return to_route('grades.all')->with('fail', 'Curso no encontrado.');
         } catch (\Throwable $th) {
-            DB::rollBack();
             return to_route('grades.all')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
         }
     }
 
-    public function delete(int $id)
+    public function destroy(int $id)
     {
         $grade = Grade::find($id);
 

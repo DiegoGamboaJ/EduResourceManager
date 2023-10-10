@@ -44,7 +44,7 @@
                                             </div>
 
                                             <div>
-                                                <form action="{{route('blocks.delete', ['id' => $block->id])}}" method="POST">
+                                                <form action="{{route('blocks.destroy', ['id' => $block->id])}}" method="POST">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="hover:text-red-950 active:text-red-700">
