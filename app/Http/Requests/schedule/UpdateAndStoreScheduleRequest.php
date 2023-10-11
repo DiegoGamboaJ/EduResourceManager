@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\schedule;
 
+use App\Models\Schedule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAndStoreScheduleRequest extends FormRequest

@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Reserva\StoreReservaRequest;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
 
-    public function save(StoreReservaRequest $request)
+    public function store(StoreReservaRequest $request)
     {
 
         Reservation::create([

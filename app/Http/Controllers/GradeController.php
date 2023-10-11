@@ -11,7 +11,7 @@ class GradeController extends Controller
 {
     public function index()
     {
-        $grades = Grade::paginate(10);
+        $grades = Grade::orderBy('name')->paginate(10);
 
         return view('grades.index', compact('grades'));
     }
@@ -31,7 +31,7 @@ class GradeController extends Controller
                 'schedule_id' => $request->schedule,
             ]);
 
-            return to_route('grades.all')->with('success', 'Curso creado correctamente.');
+            return to_route('grades.index')->with('success', 'Curso creado correctamente.');
         } catch (\Throwable $th) {
             return response()->json(['status' => 'fail', 'message' => 'Error al agregar un grado']);
         }
@@ -54,11 +54,11 @@ class GradeController extends Controller
                 'name' => $request->name,
                 'schedule_id' => $request->schedule,
             ]);
-            return to_route('grades.all')->with('success', 'Curso actualizado correctamente.');
+            return to_route('grades.index')->with('success', 'Curso actualizado correctamente.');
         } catch (ModelNotFoundException $th) {
-            return to_route('grades.all')->with('fail', 'Curso no encontrado.');
+            return to_route('grades.index')->with('fail', 'Curso no encontrado.');
         } catch (\Throwable $th) {
-            return to_route('grades.all')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
+            return to_route('grades.index')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
         }
     }
 
@@ -68,6 +68,6 @@ class GradeController extends Controller
 
         $grade->delete();
 
-        return to_route('grades.all')->with('success', 'El curso a sido eliminado satisfactoriamente.');
+        return to_route('grades.index')->with('success', 'El curso a sido eliminado satisfactoriamente.');
     }
 }

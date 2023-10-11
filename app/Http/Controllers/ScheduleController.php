@@ -28,7 +28,7 @@ class ScheduleController extends Controller
             'cycle' => $request->cycle,
         ]);
 
-        return to_route('schedules.all')->with('success', 'Ciclo creado correctamente.');
+        return to_route('schedules.index')->with('success', 'Ciclo creado correctamente.');
     }
 
     public function edit(int $id)
@@ -46,11 +46,11 @@ class ScheduleController extends Controller
             $schedule->update([
                 'cycle' => $request->cycle,
             ]);
-            return to_route('schedules.all')->with('success', 'Ciclo actualizado correctamente.');
+            return to_route('schedules.index')->with('success', 'Ciclo actualizado correctamente.');
         } catch (ModelNotFoundException $th) {
-            return to_route('grades.all')->with('fail', 'Ciclo no encontrado.');
+            return to_route('grades.index')->with('fail', 'Ciclo no encontrado.');
         } catch (\Throwable $th) {
-            return to_route('grades.all')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
+            return to_route('grades.index')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
         }
     }
 
@@ -60,6 +60,6 @@ class ScheduleController extends Controller
 
         $schedule->delete();
 
-        return to_route('schedules.all')->with('success', 'El ciclo a sido eliminado satisfactoriamente.');
+        return to_route('schedules.index')->with('success', 'El ciclo a sido eliminado satisfactoriamente.');
     }
 }

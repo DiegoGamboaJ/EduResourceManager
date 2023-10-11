@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\grade;
+namespace App\Http\Requests\user;
 
-use App\Models\Grade;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAndStoreGradeRequest extends FormRequest
+class UpdateAndStoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class UpdateAndStoreGradeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:6', 'unique:' . Grade::class, 'regex:/^[1-8]°[A-F]$/'],
-            'schedule' => ['required'],
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class, 'ends_with:@colegiojohnwall.cl'],
         ];
     }
 }

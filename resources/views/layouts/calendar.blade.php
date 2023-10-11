@@ -52,7 +52,7 @@
                         </div>
 
                         <!--Modal body-->
-                        <form method="POST" action="{{ route('reservation.save') }}">
+                        <form method="POST" action="{{ route('reservation.store') }}">
                             <div class="relative p-4">
                                 <p></p>
 

@@ -11,17 +11,25 @@ class BlockController extends Controller
 {
     public function index()
     {
-        $blocks = Block::paginate(10);
+        try {
+            $blocks = Block::paginate(10);
 
-        return view('blocks.index', compact('blocks'));
+            return view('blocks.index', compact('blocks'));
+        } catch (\Throwable $th) {
+            return response()->json(['statu' => 'fail', 'message' => 'Error al cargar la pagina']);
+        }
     }
 
     public function edit(int $id)
     {
-        $schedules = Schedule::all();
-        $block = Block::findOrFail($id);
+        try {
+            $schedules = Schedule::all();
+            $block = Block::findOrFail($id);
 
-        return view('blocks.edit', compact('block', 'schedules'));
+            return view('blocks.edit', compact('block', 'schedules'));
+        } catch (\Throwable $th) {
+            return response()->json(['statu' => 'fail', 'message' => 'Error al cargar la pagina']);
+        }
     }
 
     public function update(UpdateAndStoreBlockRequest $request, int $id)
@@ -34,42 +42,51 @@ class BlockController extends Controller
                 'end_time' => $request->end,
                 'schedule_id' => $request->schedule,
             ]);
-            return to_route('blocks.all')->with('success', 'Bloque actualizado correctamente.');
+            return to_route('blocks.index')->with('success', 'Bloque actualizado correctamente.');
         } catch (ModelNotFoundException $th) {
-            return to_route('blocks.all')->with('fail', 'Bloque no encontrado.');
+            return to_route('blocks.index')->with('fail', 'Bloque no encontrado.');
         } catch (\Throwable $th) {
-            return to_route('blocks.all')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
+            return to_route('blocks.index')->with('fail', 'Ha ocurrido un fallo en la actualizacion.');
         }
     }
 
     public function create()
     {
-        $schedules = Schedule::all();
+        try {
+            $schedules = Schedule::all();
 
-        return view('blocks.create', compact('schedules'));
+            return view('blocks.create', compact('schedules'));
+        } catch (\Throwable $th) {
+            return response()->json(['statu' => 'fail', 'message' => 'Error al cargar la pagina']);
+        }
     }
 
     public function store(UpdateAndStoreBlockRequest $request)
     {
         try {
-
             Block::create([
                 'start_time' => $request->start,
                 'end_time' => $request->end,
                 'schedule_id' => $request->schedule,
             ]);
-            return to_route('blocks.all')->with('success', 'Bloque creado correctamente.');
+            return to_route('blocks.index')->with('success', 'Bloque creado correctamente.');
         } catch (\Throwable $th) {
-            return to_route('blocks.all')->with('fail', 'Ha ocurrido un fallo en la creacion del bloque.');
+            return to_route('blocks.index')->with('fail', 'Ha ocurrido un fallo en la creacion del bloque.');
         }
     }
 
     public function destroy(int $id)
     {
-        $block = Block::find($id);
+        try {
+            $block = Block::find($id);
 
-        $block->delete();
+            $block->delete();
 
-        return to_route('blocks.all')->with('success', 'El bloque a sido eliminado satisfactoriamente.');
+            return to_route('blocks.index')->with('success', 'El bloque a sido eliminado satisfactoriamente.');
+        } catch (ModelNotFoundException $th){
+            return response()->json(['statu' => 'fail', 'message' => 'Bloque no encontrado']);
+        } catch (\Throwable $th) {
+            return response()->json(['statu' => 'fail', 'message' => 'Ha ocurrido un fallo en la eliminacion del bloque']);
+        }
     }
 }
