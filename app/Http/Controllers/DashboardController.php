@@ -10,14 +10,18 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        try {
+            $grades = Grade::all();
+            $users = User::where('role', 'profesor')->get();
+            $blocks = Block::all();
 
-        $grades = Grade::all();
-        $users = User::where('role','profesor')->get();
-        $blocks = Block::all();
+            $reservations = Reservation::with('block', 'grade')->get();
 
-        $reservations = Reservation::with('block', 'grade')->get();
-
-        return view('dashboard', compact('reservations', 'grades', 'users', 'blocks'));
+            return view('dashboard', compact('reservations', 'grades', 'users', 'blocks'));
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'Fail', 'message' =>'Ah ocurrido un error inesperado']);
+        }
     }
 }
