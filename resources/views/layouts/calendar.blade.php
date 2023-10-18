@@ -18,7 +18,6 @@
                     Reservar
                 </button>
             </div>
-
             <div id="calendar">
             </div>
             <script src="scripts.js"></script>
@@ -38,7 +37,7 @@
                             <!--Modal title-->
                             <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
                                 id="exampleModalScrollableLabel">
-                                Reservar tablets
+                                Reservar
                             </h5>
                             <!--Close button-->
                             <button type="button"
@@ -100,7 +99,7 @@
                                         <select id="users" data-te-select-init data-te-select-option-height="52"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             name="user_id">
-                                            <option selected disabled>Elige un profesor</option>
+                                            <option selected disabled>Seleccione a un profesor</option>
 
                                             @foreach ($users as $user)
                                                 <option value="{{ $user->id }}"
@@ -112,9 +111,9 @@
                                     @else
                                         <label
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuario</label>
-                                        <select data-te-select-init disabled name="{{ Auth::user()->id }}">
+                                        <select data-te-select-init name="user_id">
                                             <option value="{{ Auth::user()->id }}">
-                                                {{ Auth::user()->name . ' ' . Auth::user()->surname }}</option>
+                                                {{ auth()->user()->name . ' ' . Auth::user()->surname }}</option>
                                         </select>
                                     @endif
                                 </div>
