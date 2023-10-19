@@ -78,7 +78,7 @@ class BlockController extends Controller
     public function destroy(int $id)
     {
         try {
-            $block = Block::find($id);
+            $block = Block::findOrFail($id);
 
             $block->delete();
 
