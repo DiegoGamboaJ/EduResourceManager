@@ -53,4 +53,9 @@ class Reservation extends Model
          return $this->belongsTo(Grade::class);
      }
 
+     public function devices(): BelongsTo
+    {
+        return $this->belongsTo(Device::class);
+    }
+
 }
