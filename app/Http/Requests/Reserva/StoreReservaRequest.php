@@ -26,6 +26,7 @@ class StoreReservaRequest extends FormRequest
             'user_id' => ['required'],
             'grade_id' => ['required'],
             'block_id' => ['required'],
+            'device_id' => ['required'],
         ];
     }
 }
